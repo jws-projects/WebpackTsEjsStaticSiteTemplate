@@ -1,0 +1,24 @@
+block var
+include ./_data/_meta
+
+- const WEBP = self.htmlWebpackPlugin.options.data.IS_WEBP
+- const IMAGE_URL = self.htmlWebpackPlugin.options.data.IMAGE_URL
+- const path = meta[page].path
+- const img = IMAGE_URL =='' ? `${path}assets/images/` : `${IMAGE_URL}assets/images/`
+
+include ./mixin/__mixins
+include ./common/_head
+
+<!DOCTYPE html>
+html(lang="ja")
+  head
+    +head(page,meta)
+    include ./common/_gahead
+  body(class=page)
+    .ly_wrap
+      header
+        include ./common/_header
+      main.ly_main
+        block content
+      footer
+        include ./common/_footer

@@ -1,0 +1,26 @@
+//-
+  options
+    path: 'ファイルパス',
+    name: 'ファイル名(拡張子なし。PCと画像を出し分ける場合はSPのファイル名)',
+    sp: 'SPのファイル名(拡張子なし。オプション)',
+    alt: 'alt内容(オプション)',
+    pcw: 'pcのwidth',
+    pch: 'pcのheight',
+    spw: 'spのwidth',
+    sph: 'spのheight',
+
+mixin picture(options)
+  - pcSize = 768
+  - options = options || {};
+  picture
+    if(options.sp)
+      source(
+        media=`(max-width:${pcSize - 1}px)`
+        srcset=`${img}${options.sp}`
+        aspect-ratio=`${options.spw}/${options.sph}`
+      )
+    img(
+      src=`${img}${options.pc}`
+      aspect-ratio=`${options.pcw}/${options.pch}`
+      alt=(options.alt || '')
+    )

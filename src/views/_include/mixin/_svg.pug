@@ -1,0 +1,5 @@
+mixin svg(options)
+  - options = options || {};
+  svg(width=options.w, height=options.h)
+    use(xlink:href=`${img}${options.src}#${options.id}`)
+
