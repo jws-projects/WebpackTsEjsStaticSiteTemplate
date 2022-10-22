@@ -1,5 +1,5 @@
-@use "global" as *;
-@use "include-media/dist/_include-media" as *;
+@use 'global' as *;
+@use 'include-media/dist/_include-media' as *;
 
 .ly_container {
   max-width: pc(1400);
@@ -9,12 +9,12 @@
   margin-right: auto;
   display: block;
   position: relative;
-  @include media("<tab", "screen") {
+  @include media('<tab', 'screen') {
     padding: 0 vw(15);
   }
   &_small {
     width: pc(1000);
-    @include media("<tab", "screen") {
+    @include media('<tab', 'screen') {
       width: 100%;
     }
   }

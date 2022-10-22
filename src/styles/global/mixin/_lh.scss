@@ -1,5 +1,5 @@
-@use "sass:math";
-@use "../setting" as *;
+@use 'sass:math';
+@use '../setting' as *;
 
 @function get_lh($fz, $lh) {
   @return math.div($lh, $fz);
@@ -15,7 +15,7 @@
     display: block;
     width: 0;
     height: 0;
-    content: "";
+    content: '';
   }
   &::before {
     margin-top: calc((1 - #{math.div($lh, $fz)}) * 0.5em);

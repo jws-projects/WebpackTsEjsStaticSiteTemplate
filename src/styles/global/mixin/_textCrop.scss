@@ -1,12 +1,12 @@
-@use "sass:math";
-@use "../setting" as *;
+@use 'sass:math';
+@use '../setting' as *;
 
 @mixin textCrop($fz, $top-crop, $bottom-crop) {
   $dynamic-top-crop: math.div(max($top-crop, 0), $fz);
   $dynamic-bottom-crop: math.div(max($bottom-crop, 0), $fz);
   &::before,
   &::after {
-    content: "";
+    content: '';
     display: block;
     height: 0;
     width: 0;

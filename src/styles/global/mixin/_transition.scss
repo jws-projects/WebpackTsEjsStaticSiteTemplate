@@ -1,4 +1,4 @@
-@use "../setting" as *;
+@use '../setting' as *;
 
 @mixin transition($prop: all, $time: 0.5s) {
   transition: $time $easeOutExpo $prop;

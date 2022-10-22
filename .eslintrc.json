@@ -2,15 +2,22 @@
   "root": true,
   "extends": [
     "standard",
-    "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "env": {
     "browser": true
   },
   "plugins": [
-    "prettier"
+    "prettier",
+    "@typescript-eslint"
   ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    // TypeScriptのLint時に参照するconfigファイルを指定
+    "project": "./tsconfig.json"
+  },
   "rules": {
     "prettier/prettier": [
       "error",
@@ -28,6 +35,10 @@
     "no-path-concat": 0,
     "array-callback-return": 0,
     "new-cap": "off",
+    "semi": [
+      "error",
+      "never"
+    ],
     "array-element-newline": [
       "error",
       "consistent"

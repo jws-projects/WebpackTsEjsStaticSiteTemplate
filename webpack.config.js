@@ -16,6 +16,7 @@ const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
 
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const IMAGE_URL = process.env.IMAGE_URL;
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
@@ -119,7 +120,7 @@ const chacheSetting = false;
 module.exports = {
   mode: process.env.NODE_ENV,
 
-  entry: [path.join(dirJs, 'index.js'), ...scssFiles],
+  entry: [path.join(dirJs, 'main.ts'), ...scssFiles],
 
   target,
 
@@ -160,9 +161,12 @@ module.exports = {
 
   resolve: {
     modules: [dirJs, dirViews, dirShared, dirStyles, dirNode],
+    extensions: ['.ts', '.js'],
   },
 
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
+
     new webpack.DefinePlugin({
       IS_DEVELOPMENT,
     }),
@@ -203,21 +207,45 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/,
         include: path.resolve(__dirname, 'src/js'),
         use: [
           {
             loader: 'thread-loader',
             options: {
               workers: require('os').cpus().length - 1,
-              name: 'js-loader-pool',
+              name: 'ts-loader-pool',
             },
           },
           {
             loader: 'esbuild-loader',
             options: {
+              loader: 'ts',
               target: 'es2015',
+              minify: !IS_DEVELOPMENT,
               sourcemap: IS_DEVELOPMENT,
+            },
+          },
+        ],
+      },
+
+      {
+        test: /\.tsx$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'thread-loader',
+            options: {
+              workers: require('os').cpus().length - 1,
+              name: 'tsx-loader-pool',
+            },
+          },
+          {
+            loader: 'esbuild-loader',
+            options: {
+              loader: 'tsx',
+              minify: !IS_DEVELOPMENT,
+              target: 'es2015',
             },
           },
         ],

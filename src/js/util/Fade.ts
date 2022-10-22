@@ -1,15 +1,12 @@
 import gsap from 'gsap';
 
 export default class Fade {
-  /**
-   * Fadeに関するClass
-   * @param {{
-   *  element: HTMLElement,
-   *  duration: number,
-   *  ease: String,
-   *  display: String
-   * }}
-   */
+  public element?: string | object | HTMLElement | gsap.TweenTarget | null;
+  public duration?: gsap.TweenValue | undefined;
+  public ease?: string | gsap.EaseFunction | undefined;
+  public display?: gsap.TweenValue | undefined;
+  public show?: boolean | null;
+
   constructor({
     element = document.querySelector('.js-fade'),
     duration = 0.5,
@@ -23,43 +20,31 @@ export default class Fade {
     this.show = false;
   }
 
-  /**
-   * fadeOutを行うための関数。
-   */
   fadeOut() {
-    gsap.set(this.element, { opacity: 1, display: this.display });
-    gsap.to(this.element, {
+    gsap.set(this.element!, { opacity: 1, display: this.display });
+    gsap.to(this.element!, {
       opacity: 0,
       ease: this.ease,
       duration: this.duration,
-      // onStart: () => {
-      //   document.querySelector(this.element).style.pointerEvents = 'none';
-      // },
-      onComplete: () => {
-        document.querySelector(this.element).style.display = 'none';
+      onComplete: (): void => {
+        gsap.set(this.element!, { display: 'none' });
       },
     });
   }
 
-  /**
-   * fadeInを行うための関数。
-   */
   fadeIn() {
-    gsap.set(this.element, {
+    gsap.set(this.element!, {
       opacity: 0,
       display: this.display,
       pointerEvents: 'all',
     });
-    gsap.to(this.element, {
+    gsap.to(this.element!, {
       opacity: 1,
       ease: this.ease,
       duration: this.duration,
     });
   }
 
-  /**
-   * fadeToggle
-   */
   fadeToggle() {
     if (!this.show) {
       this.fadeIn();

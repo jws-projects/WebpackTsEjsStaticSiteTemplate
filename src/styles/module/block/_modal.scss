@@ -1,5 +1,5 @@
-@use "global" as *;
-@use "include-media/dist/_include-media" as *;
+@use 'global' as *;
+@use 'include-media/dist/_include-media' as *;
 
 .bl_modal {
   position: fixed;
@@ -34,7 +34,7 @@
     height: pc(400);
     position: relative;
     z-index: 2;
-    @include media("<tab") {
+    @include media('<tab') {
       max-width: vw(350);
       height: vw(200);
     }

@@ -1,6 +1,12 @@
 import Fade from '../util/Fade';
 
-class Ytmodal {
+class YtModal {
+  readonly movBtns!: NodeListOf<Element> | null;
+  public modal?: Element | null;
+  public iframeYt?: Element | null;
+  public modalMask?: Element | null;
+  public fade?: any;
+
   constructor() {
     this.movBtns = document.querySelectorAll('.js-ytmodalbtn');
     this.modal = document.querySelector('.bl_modal');
@@ -11,10 +17,10 @@ class Ytmodal {
   }
 
   show() {
-    this.movBtns.forEach((movBtn) => {
+    this.movBtns?.forEach((movBtn) => {
       movBtn.addEventListener('click', () => {
         const yt = movBtn.getAttribute('data-yt');
-        this.iframeYt.setAttribute(
+        this.iframeYt?.setAttribute(
           'src',
           `https://www.youtube.com/embed/${yt}`
         );
@@ -24,17 +30,18 @@ class Ytmodal {
   }
 
   hide() {
-    this.modalMask.addEventListener('click', () => {
-      this.iframeYt.setAttribute('src', ``);
+    this.modalMask?.addEventListener('click', () => {
+      this.iframeYt?.setAttribute('src', ``);
       this.fade.fadeOut();
     });
   }
 
   init() {
+    console.log('ytinit');
     this.show();
     this.hide();
   }
 }
 
-const ytmodal = new Ytmodal();
-export default ytmodal;
+const ytModal = new YtModal();
+export default ytModal;

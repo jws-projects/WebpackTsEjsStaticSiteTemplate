@@ -1,7 +1,7 @@
 const isSP = () => {
-  const ww = $(window).width();
+  const windowInnerWidth = window.innerWidth;
   const spWidth = 768;
-  if (ww <= spWidth) {
+  if (windowInnerWidth <= spWidth) {
     return true;
   } else {
     return false;
