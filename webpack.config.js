@@ -132,6 +132,10 @@ module.exports = {
     // maxAssetSize: 512000,
   },
 
+  externals: {
+    sharp: 'commonjs sharp',
+  },
+
   devtool: IS_DEVELOPMENT ? 'source-map' : false,
 
   devServer: {
@@ -301,13 +305,17 @@ module.exports = {
                   ['autoprefixer', { grid: true }],
                   ['postcss-sort-media-queries', {}],
                   ['css-declaration-sorter', { order: 'smacss' }],
-                  // [
-                  //   '@fullhuman/postcss-purgecss',
-                  //   {
-                  //     content: [`./src/**/*.pug`, `./src/**/*.js`],
-                  //     deep: { standard: [/^swiper/] },
-                  //   },
-                  // ],
+                  [
+                    '@fullhuman/postcss-purgecss',
+                    {
+                      content: [
+                        './src/**/*.pug',
+                        './src/**/*.js',
+                        './src/**/*.ts',
+                      ],
+                      deep: { standard: [/^swiper/] },
+                    },
+                  ],
                 ],
               },
             },
@@ -373,25 +381,19 @@ module.exports = {
     minimizer: [
       new ImageMinimizerPlugin({
         minimizer: {
-          implementation: ImageMinimizerPlugin.imageminMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           options: {
-            plugins: [
-              [
-                'gifsicle',
-                {
-                  interlaced: false,
-                  optimizationLevel: 1,
-                  colors: 256,
-                },
-              ],
-              [
-                'mozjpeg',
-                {
-                  quality: 95,
-                },
-              ],
-              ['pngquant', { quality: [0.9, 0.95] }],
-            ],
+            encodeOptions: {
+              mozjpeg: {
+                quality: 95,
+              },
+              webp: {
+                quality: 95,
+              },
+              png: {
+                quality: 95,
+              },
+            },
           },
         },
       }),
