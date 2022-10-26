@@ -1,4 +1,4 @@
-# webpack static site template
+# Webpack Ts Ejs StaticSite Template
 
 webpack のみで実装した LP や静的 web サイトの開発環境です。
 
@@ -55,7 +55,7 @@ pnpm run build
 | `js`           | scss ファイルの開発ディレクトリ<br>babel を通して es5 に変換されて`public`へ出力される                    |
 | `shared`       | php、mp4、json など圧縮不要なファイルを `public` に移すためのディレクトリ<br>ディレクトリごと移管される。 |
 | `styles`       | scss ファイルの開発ディレクトリ<br>css に変換されて`public`へ出力される                                   |
-| `views`        | pug ファイルの開発ディレクトリ<br>html に変換されて`public`へ出力される                                   |
+| `views`        | ejs ファイルの開発ディレクトリ<br>html に変換されて`public`へ出力される                                   |
 
 ## meta 情報の一括管理
 
@@ -115,8 +115,8 @@ IMAGE_URL=''
 ```scss
 @mixin bgi($url) {
   // .envのIMAGE_URLを確認し、入力があれば書き換える
-  @if ($IMAGE_URL == "") {
-    $img: "../../assets/images/";
+  @if ($IMAGE_URL == '') {
+    $img: '../../assets/images/';
     background-image: url($img + $url);
   } @else {
     background-image: url($IMAGE_URL + $url);
@@ -133,10 +133,6 @@ IMAGE_URL=''
 [include-media](https://eduardoboucas.github.io/include-media/#features)で実装しています。
 
 `src/styles/foundation/mixin/_mediaquerys.scss`にて指定しています。
-
-## SSI に対応
-
-SSI に対応しています。`shared`内に SSI する html を入れて pug に記載すると出力されます。
 
 ## PurgeCSS の Safelist
 
