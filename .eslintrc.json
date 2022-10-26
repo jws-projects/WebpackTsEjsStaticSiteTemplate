@@ -15,7 +15,6 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
-    // TypeScriptのLint時に参照するconfigファイルを指定
     "project": "./tsconfig.json"
   },
   "rules": {

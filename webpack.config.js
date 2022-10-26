@@ -47,8 +47,6 @@ console.log('IS_WEBP :>> ', IS_WEBP);
 console.log('IS_JQUERY :>> ', IS_JQUERY);
 console.log('target :>> ', target);
 
-const getFileName = (path) => path.replace(/\.[^/.]+$/, '');
-
 const jq = IS_JQUERY
   ? [
       new webpack.ProvidePlugin({
@@ -323,17 +321,19 @@ module.exports = {
                   ['autoprefixer', { grid: true }],
                   ['postcss-sort-media-queries', {}],
                   ['css-declaration-sorter', { order: 'smacss' }],
-                  // [
-                  //   '@fullhuman/postcss-purgecss',
-                  //   {
-                  //     content: [
-                  //       './src/**/*.ejs',
-                  //       './src/**/*.js',
-                  //       './src/**/*.ts',
-                  //     ],
-                  //     deep: { standard: [/^swiper/] },
-                  //   },
-                  // ],
+                  [
+                    '@fullhuman/postcss-purgecss',
+                    {
+                      content: [
+                        './src/**/*.html',
+                        './src/**/*.ejs',
+                        './src/**/*.js',
+                        './src/**/*.ts',
+                      ],
+                      safelist: { standard: [/^swiper/] },
+                      skippedContentGlobs: ['node_modules/**'],
+                    },
+                  ],
                 ],
               },
             },
