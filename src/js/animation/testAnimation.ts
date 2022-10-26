@@ -1,16 +1,16 @@
-// import { gsap } from 'gsap';
-// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// const testAnimation = () => {
-//   gsap.registerPlugin(ScrollTrigger);
-//   const tl = gsap.timeline({
-//     scrollTrigger: {
-//       trigger: '.bl_block',
-//       start: 'top center',
-//       end: 'bottom center',
-//       // markers: true,
-//     },
-//   });
-// };
+const testAnimation = () => {
+  gsap.registerPlugin(ScrollTrigger);
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.bl_block',
+      start: 'top center',
+      end: 'bottom center',
+      markers: true,
+    },
+  });
+};
 
-// export default testAnimation;
+export default testAnimation;

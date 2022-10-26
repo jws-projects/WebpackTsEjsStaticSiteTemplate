@@ -1,5 +1,7 @@
+import testAnimation from './testAnimation';
+
 const animation = () => {
-  // testAnimation();
+  testAnimation();
 };
 
 export default animation;

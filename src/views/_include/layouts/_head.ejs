@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="<%- pageMeta.lang %>">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="format-detection" content="telephone=no, address=no, email=no">
+  <title><%- pageMeta.title %></title>
+  <meta name="description" content="<%= pageMeta.description %>">
+  <link rel="canonical" href="<%- `${META.global.base_url}${pageMeta.link}` %> ">
+  <meta property="og:title" content="<%= pageMeta.title %>">
+  <meta property="og:description" content="<%= pageMeta.description %>">
+  <meta property="og:url" content="<%- `${META.global.base_url}${pageMeta.link}` %>">
+  <meta property="og:image" content="<%- `${META.global.base_url}${META.global.og_image}` %>">
+  <meta property="og:type" content="<%= META.global.og_type %>">
+  <meta property="og:site_name" content="<%= META.global.og_site_name %>">
+  <meta name="twitter:card" content="summary_large_image">
+  <% if (META.global.tw_site) { %>
+  <meta name="twitter:site" content="<%= META.global.tw_site %>">
+  <% } %>
+  <% if (META.global.fb_app_id) { %>
+  <meta property="fb:app_id" content="<%= META.global.fb_app_id %>">
+  <% } %>
+  <link rel="shortcut icon" href="<%- `${pageMeta.path}assets/images/favicon.ico` %>">
+  <%- typeof link !== 'undefined' ? link(__append) : '' %>
+</head>
+
+<body>
+  <div class="ly_wrap">
+    <%- include('./_header.ejs',{ page }) %>

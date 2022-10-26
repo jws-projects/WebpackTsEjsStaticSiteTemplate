@@ -22,7 +22,7 @@ class YtModal {
         const yt = movBtn.getAttribute('data-yt');
         this.iframeYt?.setAttribute(
           'src',
-          `https://www.youtube.com/embed/${yt}`
+          `https://www.youtube-nocookie.com/embed/${yt}`
         );
         this.fade.fadeIn();
       });
@@ -37,7 +37,6 @@ class YtModal {
   }
 
   init() {
-    console.log('ytinit');
     this.show();
     this.hide();
   }

@@ -1,0 +1,25 @@
+{
+  "global": {
+    "base_url": "https://a.com/",
+    "og_site_name": "webpack static site template",
+    "og_image": "assets/images/ogp.png",
+    "title": "webpack static site template",
+    "og_type": "website",
+    "tw_site": "@james_kojima",
+    "fb_app_id": ""
+  },
+  "top": {
+    "title": "Top Page",
+    "description": "Top description",
+    "path": "./",
+    "link": "",
+    "lang": "ja"
+  },
+  "sub": {
+    "title": "webpack static site template",
+    "description": "description",
+    "path": "../",
+    "link": "sub/",
+    "lang": "ja"
+  }
+}

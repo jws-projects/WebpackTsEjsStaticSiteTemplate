@@ -1,0 +1,29 @@
+<%
+  const path = META[page]["path"];
+  const img = IMAGE_URL =='' ? `${path}assets/images/` : `${IMAGE_URL}assets/images/`;
+  const sizeOf = require('image-size');
+  const pcSize = sizeOf(`${DIR_IMAGES}\\${pc}`);
+%>
+<% if (IS_WEBP) { %>
+<picture>
+  <% if (!sp) { %>
+  <source type="image/webp" data-srcset="<%- `${img}${pc}.webp`%>" data-aspectratio="<%- `${pcSize.width}/${pcSize.height}` %>" width="<%- pcSize.width %>" height="<%- pcSize.height %>">
+  <% } else { const spSize = sizeOf(`${DIR_IMAGES}\\${sp}`); %>
+  <source type="image/webp" media="<%- `(max-width:${BREAK_POINT - 1}px)` %>" data-srcset="<%- `${img}${sp}.webp` %>" data-aspectratio="<%- `${spSize.width/2}/${spSize.height/2}` %>" width="<%- spSize.width/2 %>" height="<%- spSize.height/2 %>">
+  <% if (retina.length) {  %>
+  <source type="image/webp" media="<%- `(min-width:${BREAK_POINT}px)` %>" data-srcset="<%- `${img}${pc}.webp 1x, ${img}${retina}.webp 2x` %>" data-aspectratio="<%- `${pcSize.width}/${pcSize.height}` %>" width="<%- pcSize.width %>" height="<%- pcSize.height %>">
+  <% } else { %>
+  <source type="image/webp" media=<%- `(min-width:${BREAK_POINT}px)` %> data-srcset="<%- `${img}${pc}.webp` %>" data-aspectratio="<%- `${pcSize.width}/${pcSize.height}` %>" width="<%- pcSize.width %>" height="<%- pcSize.height %>">
+  <% } %>
+  <source media=<%- `(min-width:${BREAK_POINT}px)` %> data-srcset=<%- `${img}${pc}` %> data-aspectratio=<%-  `${pcSize.width}/${pcSize.height}` %> width=<%- pcSize.width %> height=<%- pcSize.height %>>
+  <% } %>
+  <img alt=<%-(alt || '') %> class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7" data-src=<%- `${img}${pc}` %> data-aspectratio=<%- `${pcSize.width}/${pcSize.height}` %> data-sizes="auto" width=<%- pcSize.width %> height=<%- pcSize.height %>>
+</picture>
+<% } else { %>
+<picture>
+  <% if (sp) { const spSize = sizeOf(`${DIR_IMAGES}\\${sp}`); %>
+  <source type="image/webp" media=<%- `(max-width:${BREAK_POINT - 1}px)` %> data-srcset=<%- `${img}${sp}` %> data-aspectratio=<%- `${spSize.width/2}/${spSize.height/2}` %> width=<%- spSize.width/2 %> height=<%- spSize.height/2 %>>
+  <% } %>
+  <img alt=<%-(alt || '') %> class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7" data-src=<%- `${img}${pc}` %> data-aspectratio=<%- `${pcSize.width}/${pcSize.height}` %> data-sizes="auto" width=<%- pcSize.width %> height=<%- pcSize.height %>>
+</picture>
+<% } %>

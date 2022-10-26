@@ -1,6 +1,9 @@
 // import imagesLoaded from 'imagesloaded';
 import ytmodal from './components/ytModal';
 import './util/lazyLoad';
+
+declare var BREAK_POINT: number;
+
 // import SlideToggle from './util/slideToggle';
 
 // const elm = document.querySelector('body');
@@ -8,6 +11,12 @@ import './util/lazyLoad';
 // const slideToggle = new SlideToggle();
 ytmodal.init();
 
+const msg: string = 'Hello TypeScript';
+console.log(msg);
+
+console.log('BREAK_POINT :>> ', BREAK_POINT);
+
+// BREAK_POINT
 // const loadScript = async () => {};
 
 // const afterLoadScript = async () => {

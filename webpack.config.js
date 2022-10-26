@@ -1,9 +1,10 @@
 require('dotenv').config();
 
+// * PLUGIN
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
-
+const WebpackWatchedGlobEntries = require('webpack-watched-glob-entries-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const ImageminWebpWebpackPlugin = require('imagemin-webp-webpack-plugin');
@@ -12,19 +13,21 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin');
-
+const { htmlWebpackPluginTemplateCustomizer } = require('template-ejs-loader');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-const IMAGE_URL = process.env.IMAGE_URL;
+// * ENVIRONMENT
+const META = require('./src/views/_data/meta.json');
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 const target = IS_DEVELOPMENT ? ['web'] : ['web', 'es5'];
-
+const IMAGE_URL = process.env.IMAGE_URL;
 const IS_WEBP = process.env.IS_WEBP === 'true';
 const IS_JQUERY = process.env.IS_JQUERY === 'true';
+const BREAK_POINT = process.env.BREAK_POINT;
 
+// * DIR
 const dirSrc = path.join(__dirname, 'src');
 const dirJs = path.join(__dirname, 'src/js');
 const dirShared = path.join(__dirname, 'src/shared');
@@ -37,12 +40,14 @@ const dirPublicAssetsImages = path.join(__dirname, 'public/assets/images');
 const dirPublicAssetsCSS = path.join(__dirname, 'public/assets/css');
 const dirNode = path.join(__dirname, 'node_modules');
 
-const getFileName = (path) => path.replace(/\.[^/.]+$/, '');
-
+// * CONSOLE
 console.log('** mode **', process.env.NODE_ENV);
 console.log('IMAGE_URL :>> ', IMAGE_URL);
 console.log('IS_WEBP :>> ', IS_WEBP);
 console.log('IS_JQUERY :>> ', IS_JQUERY);
+console.log('target :>> ', target);
+
+const getFileName = (path) => path.replace(/\.[^/.]+$/, '');
 
 const jq = IS_JQUERY
   ? [
@@ -54,27 +59,39 @@ const jq = IS_JQUERY
     ]
   : [];
 
-const templates = [];
-glob
-  .sync('**/*.pug', {
-    ignore: '**/_*.pug',
-    cwd: dirViews,
-  })
-  .map(function (file) {
-    templates.push(
+const entries = WebpackWatchedGlobEntries.getEntries(
+  [path.resolve(__dirname, `src/views/**/*.html`)],
+  {
+    ignore: path.resolve(__dirname, `src/views/**/_*.html`),
+  }
+)();
+
+const htmlGlobPlugins = (entries) => {
+  return Object.keys(entries).map(
+    (key) =>
       new HtmlWebpackPlugin({
-        template: path.resolve(dirViews, file),
-        filename: getFileName(file) + '.html',
-        data: {
-          IMAGE_URL,
-          IS_WEBP,
-        },
-        minify: true,
-        alwaysWriteToDisk: true,
-        inject: false,
+        filename: `${key}.html`,
+        template: htmlWebpackPluginTemplateCustomizer({
+          htmlLoaderOption: {
+            sources: false,
+            minimize: false,
+          },
+          templatePath: `src/views/${key}.html`,
+          templateEjsLoaderOption: {
+            data: {
+              BREAK_POINT,
+              IMAGE_URL,
+              IS_WEBP,
+              META,
+              DIR_IMAGES: dirImages,
+            },
+          },
+        }),
+        inject: true,
+        minify: false,
       })
-    );
-  });
+  );
+};
 
 const scssFiles = [];
 glob
@@ -150,6 +167,7 @@ module.exports = {
     devMiddleware: {
       writeToDisk: false,
     },
+    watchFiles: ['src/**/*.html', 'src/**/*.ejs'],
   },
 
   watchOptions: {
@@ -173,6 +191,7 @@ module.exports = {
 
     new webpack.DefinePlugin({
       IS_DEVELOPMENT,
+      BREAK_POINT,
     }),
 
     new CopyWebpackPlugin({
@@ -189,9 +208,9 @@ module.exports = {
       chunkFilename: 'assets/css/[id].css',
     }),
 
-    new HtmlWebpackPugPlugin({
-      adjustIndent: true,
-    }),
+    // new HtmlWebpackPugPlugin({
+    //   adjustIndent: true,
+    // }),
 
     new HtmlWebpackHarddiskPlugin(),
 
@@ -203,7 +222,7 @@ module.exports = {
 
     ...webpSetting,
 
-    ...templates,
+    ...htmlGlobPlugins(entries),
 
     ...jq,
   ],
@@ -256,7 +275,7 @@ module.exports = {
       },
 
       {
-        test: /\.pug$/,
+        test: [/\.html$/, /\.ejs$/],
         include: path.resolve(__dirname, 'src/views'),
         exclude: /node_modules/,
         use: [
@@ -264,15 +283,14 @@ module.exports = {
             loader: 'thread-loader',
             options: {
               workers: require('os').cpus().length - 1,
-              name: 'pug-loader-pool',
+              name: 'ejs-loader-pool',
             },
           },
           {
-            loader: 'pug3-loader',
-            options: {
-              self: true,
-              pretty: true,
-            },
+            loader: 'html-loader',
+          },
+          {
+            loader: 'template-ejs-loader',
           },
         ],
       },
@@ -305,17 +323,17 @@ module.exports = {
                   ['autoprefixer', { grid: true }],
                   ['postcss-sort-media-queries', {}],
                   ['css-declaration-sorter', { order: 'smacss' }],
-                  [
-                    '@fullhuman/postcss-purgecss',
-                    {
-                      content: [
-                        './src/**/*.pug',
-                        './src/**/*.js',
-                        './src/**/*.ts',
-                      ],
-                      deep: { standard: [/^swiper/] },
-                    },
-                  ],
+                  // [
+                  //   '@fullhuman/postcss-purgecss',
+                  //   {
+                  //     content: [
+                  //       './src/**/*.ejs',
+                  //       './src/**/*.js',
+                  //       './src/**/*.ts',
+                  //     ],
+                  //     deep: { standard: [/^swiper/] },
+                  //   },
+                  // ],
                 ],
               },
             },

@@ -1,0 +1,34 @@
+<% const page = "top"; %>
+<% function link(__append) { %><% } %>
+<% function script(__append) { %><% } %>
+
+<%- include('./_include/layouts/_head.ejs', { pageMeta: META[page],page }) %>
+<main class="ly_main">
+
+  <h1>TOP</h1>
+
+  <p>
+    <%- include('./_include/modules/_picture.ejs', {
+      page,
+      pc:"pc.jpg",
+      retina: "pc@2x.jpg",
+      sp:"sp.jpg",
+      alt:"画像",
+    }) %>
+  </p>
+
+  <div>
+    <%- include('./_include/modules/_svg.ejs', {
+      page,
+      svg:"logo",
+      w:"400",
+      h:"300",
+    }) %>
+  </div>
+  <div>
+    <button class="js-ytmodalbtn" data-yt="9kMGyCMBOsg">Youtube</button>
+  </div>
+
+</main>
+
+<%- include('./_include/layouts/_footer.ejs',{ page }) %>

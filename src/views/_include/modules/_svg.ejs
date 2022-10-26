@@ -1,0 +1,8 @@
+<%
+  const path = META[page]["path"];
+  const img = IMAGE_URL =='' ? `${path}assets/images/svg/` : `${IMAGE_URL}assets/images/svg/`;
+%>
+
+<svg width="<%- w %>" height="<%- h %>">
+  <use xlink:href="<%- `${img}${svg}.svg#${svg}` %>" />
+</svg>
