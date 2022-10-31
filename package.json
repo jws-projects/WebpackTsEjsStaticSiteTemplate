@@ -71,7 +71,6 @@
     "gsap": "^3.11.3",
     "imagesloaded": "^5.0.0",
     "include-media": "^1.4.10",
-    "jquery": "^3.6.1",
     "lazysizes": "^5.3.2",
     "swiper": "^8.4.4"
   }

@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 // * PLUGIN
 const path = require('path');
 const glob = require('glob');
@@ -19,13 +17,12 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 // * ENVIRONMENT
-const META = require('./src/views/_data/meta.json');
+const config = require('./.config');
 const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 const target = IS_DEVELOPMENT ? ['web'] : ['web', 'es5'];
-const IMAGE_URL = process.env.IMAGE_URL;
-const IS_WEBP = process.env.IS_WEBP === 'true';
-const IS_JQUERY = process.env.IS_JQUERY === 'true';
-const BREAK_POINT = process.env.BREAK_POINT;
+const IMAGE_URL = config.IMAGE_URL;
+const IS_WEBP = config.IS_WEBP;
+const BREAK_POINT = config.BREAK_POINT;
 
 // * DIR
 const dirSrc = path.join(__dirname, 'src');
@@ -44,18 +41,8 @@ const dirNode = path.join(__dirname, 'node_modules');
 console.log('** mode **', process.env.NODE_ENV);
 console.log('IMAGE_URL :>> ', IMAGE_URL);
 console.log('IS_WEBP :>> ', IS_WEBP);
-console.log('IS_JQUERY :>> ', IS_JQUERY);
+console.log('BREAK_POINT :>> ', BREAK_POINT);
 console.log('target :>> ', target);
-
-const jq = IS_JQUERY
-  ? [
-      new webpack.ProvidePlugin({
-        jQuery: 'jquery',
-        $: 'jquery',
-        jquery: 'jquery',
-      }),
-    ]
-  : [];
 
 const entries = WebpackWatchedGlobEntries.getEntries(
   [path.resolve(__dirname, `src/views/**/*.html`)],
@@ -80,7 +67,6 @@ const htmlGlobPlugins = (entries) => {
               BREAK_POINT,
               IMAGE_URL,
               IS_WEBP,
-              META,
               DIR_IMAGES: dirImages,
             },
           },
@@ -120,26 +106,12 @@ const webpSetting = IS_WEBP
     ]
   : [];
 
-const chacheSetting = false;
-// if (IS_DEVELOPMENT) {
-//   chacheSetting = {
-//     type: 'filesystem',
-//     buildDependencies: {
-//       config: [__filename],
-//     },
-//   };
-// } else {
-//   chacheSetting = false;
-// }
-
 module.exports = {
   mode: process.env.NODE_ENV,
 
   entry: [path.join(dirJs, 'main.ts'), ...scssFiles],
 
   target,
-
-  cache: chacheSetting,
 
   performance: {
     hints: false,
@@ -206,10 +178,6 @@ module.exports = {
       chunkFilename: 'assets/css/[id].css',
     }),
 
-    // new HtmlWebpackPugPlugin({
-    //   adjustIndent: true,
-    // }),
-
     new HtmlWebpackHarddiskPlugin(),
 
     new EslintWebpackPlugin({
@@ -221,8 +189,6 @@ module.exports = {
     ...webpSetting,
 
     ...htmlGlobPlugins(entries),
-
-    ...jq,
   ],
 
   module: {
@@ -415,9 +381,6 @@ module.exports = {
           },
         },
       }),
-      // new TerserPlugin({
-      //   extractComments: false,
-      // }),
       new ESBuildMinifyPlugin({
         target: 'es2015',
       }),
